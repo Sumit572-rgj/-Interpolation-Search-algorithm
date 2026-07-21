@@ -1,5 +1,6 @@
 import time
 import random
+import matplotlib.pyplot as plt
 
 def interpolation_search(arr, target):
     """
@@ -42,9 +43,13 @@ def binary_search(arr, target):
 
 def performance_analysis():
     sizes = [1000, 5000, 10000, 50000, 100000]
+    is_times, bs_times = [], []
+    is_comps, bs_comps = [], []
+
     print(f"{'Size':>10} {'IS Time(ms)':>14} {'BS Time(ms)':>14} "
           f"{'IS Comparisons':>16} {'BS Comparisons':>16}")
     print('-' * 75)
+
     for size in sizes:
         arr = sorted(random.sample(range(size * 10), size))
         target = arr[random.randint(0, size - 1)]
@@ -63,6 +68,38 @@ def performance_analysis():
 
         print(f"{size:>10} {is_time:>14.4f} {bs_time:>14.4f} "
               f"{comp_is:>16} {comp_bs:>16}")
+
+        # Store results for plotting
+        is_times.append(is_time)
+        bs_times.append(bs_time)
+        is_comps.append(comp_is)
+        bs_comps.append(comp_bs)
+
+    # Plotting results
+    plt.figure(figsize=(12, 6))
+
+    # Time comparison
+    plt.subplot(1, 2, 1)
+    plt.plot(sizes, is_times, marker='o', label="Interpolation Search")
+    plt.plot(sizes, bs_times, marker='s', label="Binary Search")
+    plt.xlabel("Array Size")
+    plt.ylabel("Time (ms)")
+    plt.title("Execution Time Comparison")
+    plt.legend()
+    plt.grid(True)
+
+    # Comparisons count
+    plt.subplot(1, 2, 2)
+    plt.plot(sizes, is_comps, marker='o', label="Interpolation Search")
+    plt.plot(sizes, bs_comps, marker='s', label="Binary Search")
+    plt.xlabel("Array Size")
+    plt.ylabel("Comparisons")
+    plt.title("Number of Comparisons")
+    plt.legend()
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
 
 # --- Main ---
 arr = [2, 5, 10, 15, 23, 35, 48, 60, 75, 90, 105, 120]
